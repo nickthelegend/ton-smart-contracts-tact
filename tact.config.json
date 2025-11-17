@@ -1,0 +1,15 @@
+{
+  "$schema": "http://raw.githubusercontent.com/tact-lang/tact/main/src/config/configSchema.json",
+  "projects": [
+    {
+      "name": "BeastItem",
+      "path": "BeastItem.tact",
+      "output": "./build"
+    },
+    {
+      "name": "BeastCollection",
+      "path": "BeastCollection.tact",
+      "output": "./build"
+    }
+  ]
+}
