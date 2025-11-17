@@ -1,18 +1,51 @@
-import "@stdlib/nft";
+message TransferParams {
+    newOwner: Address;
+}
 
-contract BeastItem with NftItem {
-    var attack: Int = 0;
-    var defense: Int = 0;
-    var speed: Int = 0;
+struct Stats {
+    attack: Int;
+    defense: Int;
+    speed: Int;
+}
 
-    init(content: Cell, attack: Int, defense: Int, speed: Int) {
-        self.content = content;
-        self.attack = attack;
-        self.defense = defense;
-        self.speed = speed;
+contract BeastItem {
+    owner: Address;
+    attack: Int;
+    defense: Int;
+    speed: Int;
+    metadata: Cell;
+
+    // Proper constructor – no parameters in contract header
+    init(owner_: Address, attack_: Int, defense_: Int, speed_: Int, metadata_: Cell) {
+        self.owner = owner_;
+        self.attack = attack_;
+        self.defense = defense_;
+        self.speed = speed_;
+        self.metadata = metadata_;
     }
 
-    get fun get_stats(): (Int, Int, Int) {
-        return (self.attack, self.defense, self.speed);
+    receive(msg: TransferParams) {
+        require(sender() == self.owner, "Only owner can transfer");
+        self.owner = msg.newOwner;
+    }
+
+    receive() {
+        cashback(sender());
+    }
+
+    get fun get_owner(): Address {
+        return self.owner;
+    }
+
+    get fun get_stats(): Stats {
+        return Stats{
+            attack: self.attack,
+            defense: self.defense,
+            speed: self.speed
+        };
+    }
+
+    get fun get_metadata(): Cell {
+        return self.metadata;
     }
 }
